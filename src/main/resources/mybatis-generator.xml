@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+        <!-- 数据库连接地址账号密码 -->
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver" connectionURL="jdbc:mysql://127.0.0.1:3306/db_emall" userId="root" password="XYYqq13868023025">
+        </jdbcConnection>
+        <!-- 生成 DataObject 类存放位置 -->
+        <javaModelGenerator targetPackage="com.emall.dataobject" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <!--生成映射文件存放位置-->
+        <sqlMapGenerator targetPackage="mapping" targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+        <!--生成 Dao 类存放位置-->
+        <!--客户端代码，生成易于使用的针对 Model 对象和 XML 配置文件的代码-->
+        <!--type="ANNOTATEDMAPPER", 生成 Java Model 和基于注解的 Mapper 对象-->
+        <!--type="MIXEDMAPPER"，生成基于注解的 Java Model 和相应的 Mapper 对象-->
+        <!--type="XMLMAPPER"，生成 SQLMap XML 文件和独立的 Mapper 接口-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.emall.dao" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+        <!--生成对应表及类名-->
+        <table tableName="em_user_info" domainObjectName="UserDO" enableCountByExample="false"
+               enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <table tableName="em_user_password" domainObjectName="UserPasswordDO" enableCountByExample="false"
+               enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <table tableName="em_address" domainObjectName="AddressDO" enableCountByExample="false"
+               enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <table tableName="em_item" domainObjectName="ItemDO" enableCountByExample="false"
+               enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <table tableName="em_item_attr_key" domainObjectName="ItemAttrKeyDO" enableCountByExample="false"
+               enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <table tableName="em_item_attr_val" domainObjectName="ItemAttrValDO" enableCountByExample="false"
+               enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <table tableName="em_item_stock" domainObjectName="ItemStockDO" enableCountByExample="false"
+               enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <table tableName="em_order" domainObjectName="OrderDO" enableCountByExample="false"
+               enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <table tableName="em_order_item" domainObjectName="OrderItemDO" enableCountByExample="false"
+               enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <table tableName="em_shopping_cart" domainObjectName="ShoppingCartDO" enableCountByExample="false"
+               enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <table tableName="em_buyer_comment" domainObjectName="BuyerCommentDO" enableCountByExample="false"
+               enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <table tableName="em_seller_comment" domainObjectName="SellerCommentDO" enableCountByExample="false"
+               enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false"></table>
+    </context>
+</generatorConfiguration>
