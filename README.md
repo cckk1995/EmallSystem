@@ -2,17 +2,18 @@
 
 ## 数据库设计示例
 > ### em_user_info(用户信息表)
-| SQL 字段名 | 对应中文名   | 键类型                        |
-| ---------- | ------------ | ----------------------------- |
+| SQL 字段名 | 对应中文名   | 键类型                         |
+| ---------- | ------------ | ------------------------------ |
 | user_id    | 用户 id      | 主键（雪花码生成 数据中心：1） |
-| user_name  | 用户名       |                               |
-| telephone  | 用户手机号   | 唯一索引                      |
-| address    | 居住地       |                               |
-| email      | 用户邮箱     | 唯一索引                      |
-| gender     | 性别         | 0:保密 1:男 2:女              |
-| avatar_url | 头像图片地址 | 默认为："空白头像地址"        |
-| birthday   | 用户生日     | TimeStamp                     |
-| hometown   | 家乡         |                               |
+| user_name  | 用户名       |                                |
+| real_name  | 真实姓名     |                               |
+| telephone  | 用户手机号   | 唯一索引                       |
+| address    | 居住地       |                                |
+| email      | 用户邮箱     | 唯一索引                       |
+| gender     | 性别         | 0:保密 1:男 2:女               |
+| avatar_url | 头像图片地址 | 默认为："空白头像地址"         |
+| birthday   | 用户生日     | TimeStamp                      |
+| hometown   | 家乡         |                                |
 
 > ### em_user_password (用户密码表)
 | SQL 字段名      | 对应中文名 | 键类型                        |
@@ -163,6 +164,7 @@ DROP TABLE IF EXISTS `em_user_info`;
 CREATE TABLE `em_user_info` (
   `user_id` VARCHAR(32) NOT NULL,
   `user_name` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '用户名',
+  `real_name` VARCHAR(32) NOT NULL DEFAULT '',
   `telephone` VARCHAR(32) NOT NULL DEFAULT '',
   `address` VARCHAR(32) NOT NULL DEFAULT '',
   `email` VARCHAR(256) NOT NULL DEFAULT '',
@@ -327,4 +329,3 @@ CREATE TABLE `em_seller_comment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ```
-<font style="color:red;"> 注意：具体字段类型自己设定，个别设置遵照上述12345条，最终设计文档数据库设计遵照这份文档，所以请务必确保自己维护的数据库部分与这份文档保持一致，数据库修改与文档修改要同步！ </font>
