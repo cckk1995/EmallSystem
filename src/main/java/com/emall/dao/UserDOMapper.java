@@ -1,6 +1,7 @@
 package com.emall.dao;
 
 import com.emall.dataobject.UserDO;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -52,4 +53,12 @@ public interface UserDOMapper {
      * @mbg.generated Thu Dec 27 15:26:02 CST 2018
      */
     int updateByPrimaryKey(UserDO record);
+
+    int checkUsername(String username);
+
+    int checkEmail(String email);
+
+    int checkTelephone(String telephone);
+
+    String selectLogin(@Param("username") String username, @Param("password") String password);
 }

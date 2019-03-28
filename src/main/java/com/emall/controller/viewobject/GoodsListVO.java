@@ -16,6 +16,16 @@ public class GoodsListVO {
     private String intro;
     private int itemSales;
     private int stock;
+    private String catgoryId;
+
+    public String getCatgoryId() {
+        return catgoryId;
+    }
+
+    public void setCatgoryId(String catgoryId) {
+        this.catgoryId = catgoryId;
+    }
+
     public GoodsListVO(){
     }
 

@@ -1,5 +1,8 @@
 package com.emall.response;
 
+import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 /**
  * @author XYY
  * @date 2018/12/25 10:16 PM
@@ -20,6 +23,11 @@ public class CommonReturnType {
         type.setStatus(status);
         type.setData(result);
         return type;
+    }
+
+    @JsonIgnore
+    public boolean success() {
+        return StringUtils.equals(this.status, "success");
     }
 
     public String getStatus() {

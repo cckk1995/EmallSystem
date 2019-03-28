@@ -1,10 +1,13 @@
 package com.emall.controller;
 
+import com.emall.controller.viewobject.GoodsListVO;
 import com.emall.error.BusinessException;
 import com.emall.response.CommonReturnType;
 import com.emall.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Create by chaikai on 2019/01/15
@@ -45,5 +48,28 @@ public class ItemController {
     @GetMapping("/getComments")
     public CommonReturnType getComments(@RequestParam("itemId") String itemId) throws BusinessException{
         return itemService.getComments(itemId);
+    }
+
+    @RequestMapping(value = "/getByKeyword",method = RequestMethod.GET)
+    public CommonReturnType getByKeyword(@RequestParam(value = "keyword") String keyword){
+        List<GoodsListVO> goodsListVOList = null;
+        try{
+            goodsListVOList = itemService.getItemByKeyWord(keyword);
+        }catch (BusinessException e){
+            e.printStackTrace();
+            return CommonReturnType.create(e.getErrMsg(),"false");
+        }
+
+        return CommonReturnType.create(goodsListVOList);
+    }
+
+    @RequestMapping(value = "/getGoodsListVOByItemId",method = RequestMethod.GET)
+    public CommonReturnType getGoodsListVOByItemId(@RequestParam(value = "itemId") String itemId){
+        try{
+            return CommonReturnType.create(itemService.getGoodsListVOByItemId(itemId));
+        }catch (BusinessException e){
+            e.printStackTrace();
+            return CommonReturnType.create(e.getErrMsg(),"false");
+        }
     }
 }

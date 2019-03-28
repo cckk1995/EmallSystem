@@ -98,6 +98,12 @@ public class SnowFlake {
     private static class SnowFlakeHoder{
         private static SnowFlake snowFlake=new SnowFlake(2,3);
     }
+
+    public static String genId() {
+        SnowFlake snowFlake = new SnowFlake(1, 0);
+        return String.valueOf(snowFlake.nextId());
+    }
+
     public static void main(String[] args) {
         SnowFlake userId = new SnowFlake(1, 0);
         SnowFlake addressId = new SnowFlake(2, 0);

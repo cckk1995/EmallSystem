@@ -190,4 +190,27 @@
       hometown = #{hometown,jdbcType=VARCHAR}
     where user_id = #{userId,jdbcType=VARCHAR}
   </update>
+
+
+  <select id="checkUsername"  parameterType="string" resultType="java.lang.Integer">
+    select count(1) from em_user_info
+    where user_name = #{username}
+  </select>
+
+  <select id="checkEmail" parameterType="string" resultType="java.lang.Integer">
+    select count(1) from em_user_info
+    where email = #{email}
+  </select>
+
+  <select id="checkTelephone" parameterType="string" resultType="java.lang.Integer">
+    select count(1) from em_user_info
+    where telephone = #{telephone}
+  </select>
+
+  <select id="selectLogin" parameterType="map" resultType="java.lang.String">
+    select uinfo.user_id from em_user_info uinfo,em_user_password userp
+    where uinfo.user_id=userp.user_id
+    and uinfo.user_name = #{username}
+    and userp.encrpt_password = #{password}
+  </select>
 </mapper>
