@@ -197,4 +197,7 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where buyer_comment_id = #{buyerCommentId,jdbcType=VARCHAR}
   </update>
+  <select id="selectByOrderItemId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select * from em_buyer_comment where order_item_id = #{orderItemId,jdbcType=VARCHAR}
+  </select>
 </mapper>

@@ -66,4 +66,7 @@
       </if>
     </trim>
   </insert>
+  <select id="selectByAttrKeyId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select * from em_item_attr_val where attr_key_id = #{attrKeyId};
+  </select>
 </mapper>

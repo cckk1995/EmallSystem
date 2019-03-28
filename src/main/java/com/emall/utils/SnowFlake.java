@@ -91,11 +91,28 @@ public class SnowFlake {
         return System.currentTimeMillis();
     }
 
+    //单例模式
+    public static SnowFlake getInstance(){
+        return SnowFlakeHoder.snowFlake;
+    }
+    private static class SnowFlakeHoder{
+        private static SnowFlake snowFlake=new SnowFlake(2,3);
+    }
     public static void main(String[] args) {
-        SnowFlake snowFlake = new SnowFlake(2, 3);
+        SnowFlake userId = new SnowFlake(1, 0);
+        SnowFlake addressId = new SnowFlake(2, 0);
+        SnowFlake itemId = new SnowFlake(3, 0);
+        SnowFlake shoppingcartId = new SnowFlake(4, 0);
 
-        for (int i = 0; i < (1 << 12); i++) {
-            System.out.println(snowFlake.nextId());
+        for (int i = 0; i < 5; i++) {
+            System.out.println("userId " + i + ":");
+            System.out.println(userId.nextId());
+            System.out.println("addressId " + i + ":");
+            System.out.println(addressId.nextId());
+            System.out.println("itemId " + i + ":");
+            System.out.println(itemId.nextId());
+            System.out.println("shoppingcartId " + i + ":");
+            System.out.println(shoppingcartId.nextId());
         }
 
     }

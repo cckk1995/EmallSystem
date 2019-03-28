@@ -108,4 +108,7 @@
       attr_name = #{attrName,jdbcType=VARCHAR}
     where attr_key_id = #{attrKeyId,jdbcType=INTEGER}
   </update>
+  <select id="selectByItemId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select * from em_item_attr_key where item_id = #{itemId}
+  </select>
 </mapper>

@@ -143,4 +143,15 @@
       stock = #{stock,jdbcType=INTEGER}
     where stock_id = #{stockId,jdbcType=INTEGER}
   </update>
+  <select id="selectByItemIdAndSymbol" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select * from em_item_stock where item_id = #{itemId} and attr_symbol_path = #{symbol}
+  </select>
+  <select id="getMinPrice" parameterType="java.lang.String" resultType="java.lang.Float">
+    select min(price) from (
+      select * from em_item_stock where item_id = #{itemId}
+    )c;
+  </select>
+  <select id="getStockByItemId" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select sum(stock) from em_item_stock where item_id = #{itemId}
+  </select>
 </mapper>

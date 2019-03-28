@@ -15,9 +15,10 @@ public enum EmBusinessError implements CommonError {
     USER_NOT_LOGIN(20003, "用户还未登录"),
 
     // 3000 开头为交易信息错误定义
-    STOCK_NOT_ENOUGH(30001, "库存不足");
+    STOCK_NOT_ENOUGH(30001, "库存不足"),
 
-    // …………
+    // 4000 开头为购物车信息错误定义
+    SHOPPINGCART_ITEM_NOT_EXIST(40001, "购物车商品不存在");
 
     private  int errCode;
     private String errMsg;

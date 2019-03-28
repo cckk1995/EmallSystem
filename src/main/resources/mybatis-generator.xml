@@ -25,7 +25,7 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
         <!--生成对应表及类名-->
-        <table tableName="em_user_info" domainObjectName="UserDO" enableCountByExample="false"
+        <!-- <table tableName="em_user_info" domainObjectName="UserDO" enableCountByExample="false"
                enableUpdateByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" selectByExampleQueryId="false"></table>
         <table tableName="em_user_password" domainObjectName="UserPasswordDO" enableCountByExample="false"
@@ -45,14 +45,14 @@
                enableSelectByExample="false" selectByExampleQueryId="false"></table>
         <table tableName="em_item_stock" domainObjectName="ItemStockDO" enableCountByExample="false"
                enableUpdateByExample="false" enableDeleteByExample="false"
-               enableSelectByExample="false" selectByExampleQueryId="false"></table>
+               enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
         <table tableName="em_order" domainObjectName="OrderDO" enableCountByExample="false"
                enableUpdateByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" selectByExampleQueryId="false"></table>
-        <table tableName="em_order_item" domainObjectName="OrderItemDO" enableCountByExample="false"
+        <!-- <table tableName="em_order_item" domainObjectName="OrderItemDO" enableCountByExample="false"
                enableUpdateByExample="false" enableDeleteByExample="false"
-               enableSelectByExample="false" selectByExampleQueryId="false"></table>
-        <table tableName="em_shopping_cart" domainObjectName="ShoppingCartDO" enableCountByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+        <!-- <table tableName="em_shopping_cart" domainObjectName="ShoppingCartDO" enableCountByExample="false"
                enableUpdateByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" selectByExampleQueryId="false"></table>
         <table tableName="em_buyer_comment" domainObjectName="BuyerCommentDO" enableCountByExample="false"
@@ -60,6 +60,6 @@
                enableSelectByExample="false" selectByExampleQueryId="false"></table>
         <table tableName="em_seller_comment" domainObjectName="SellerCommentDO" enableCountByExample="false"
                enableUpdateByExample="false" enableDeleteByExample="false"
-               enableSelectByExample="false" selectByExampleQueryId="false"></table>
+               enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
     </context>
 </generatorConfiguration>
