@@ -31,6 +31,8 @@ public interface IUserService {
 
     CommonReturnType getAddresses(String userId) throws BusinessException;
 
+    CommonReturnType setDefaultAddress(String userId, String addressId) throws BusinessException;
+
     CommonReturnType commentsBySeller(String userId) throws BusinessException;
 
     CommonReturnType commentsByUser(String userId, String order_item_id, String comment,

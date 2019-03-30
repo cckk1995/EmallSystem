@@ -342,6 +342,23 @@ public class UserServiceImpl implements IUserService {
         return CommonReturnType.create(addressDOList);
     }
 
+    @Override
+    public CommonReturnType setDefaultAddress(String userId, String addressId) throws BusinessException {
+        List<AddressDO> addressVOList = addressDOMapper.selectByUserId(userId);
+        for (AddressDO addressDO : addressVOList) {
+            if (addressDO.getAddressId().equals(addressId)) {
+                addressDO.setIsDefault(true);
+            } else {
+                addressDO.setIsDefault(false);
+            }
+            int result = addressDOMapper.updateByPrimaryKeySelective(addressDO);
+            if (result == 0) {
+                return CommonReturnType.create("修改默认地址失败", "fail");
+            }
+        }
+        return CommonReturnType.create("修改默认地址成功", "success");
+    }
+
     /**
      *
      * @return 商家评价

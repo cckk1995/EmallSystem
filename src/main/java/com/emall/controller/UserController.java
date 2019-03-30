@@ -138,6 +138,11 @@ public class UserController extends BaseController {
         return userService.getAddresses(userId);
     }
 
+    @GetMapping("setDefaultAddress")
+    public CommonReturnType seyDefaultAddress(String userId, String addressId) throws BusinessException {
+        return userService.setDefaultAddress(userId, addressId);
+    }
+
     @GetMapping("commentsBySeller")
     public CommonReturnType commentsBySeller(String userId) throws BusinessException {
         return userService.commentsBySeller(userId);
