@@ -223,7 +223,7 @@
       select item_sales from em_item where item_id = #{itemId};
   </select>
   <select id="getItemByKeyword" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select * from em_item where item_title like "%"#{keyword}"%"
+    select * from em_item where item_title like concat('%',#{keyword},'%')
   </select>
 
   <select id="getItemByItemId" parameterType="java.lang.String" resultMap="BaseResultMap">

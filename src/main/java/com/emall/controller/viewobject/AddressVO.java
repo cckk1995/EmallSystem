@@ -25,4 +25,6 @@ public class AddressVO {
 
     @NotBlank(message = "手机号不能为空")
     private String receiverPhone;
+
+    private Boolean isDefault;
 }

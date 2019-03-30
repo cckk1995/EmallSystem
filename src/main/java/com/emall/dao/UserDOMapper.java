@@ -61,4 +61,8 @@ public interface UserDOMapper {
     int checkTelephone(String telephone);
 
     String selectLogin(@Param("username") String username, @Param("password") String password);
+
+    String getEmailByUserId(@Param("userId") String userId);
+
+    String getTelByUserId(@Param("userId") String userId);
 }
