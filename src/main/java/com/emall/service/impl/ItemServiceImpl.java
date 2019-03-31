@@ -168,19 +168,21 @@ public class ItemServiceImpl implements ItemService {
             String orderItemId = orderItemDO.getOrderItemId();
             commentVO.setGoodsMeal(orderItemDO.getAttrVal());
             BuyerCommentDO buyerCommentDO = buyerCommentDOMapper.selectByOrderItemId(orderItemId);
-            commentVO.setContent(buyerCommentDO.getComment());
-            commentVO.setCreateTime(buyerCommentDO.getCreateTime());
-            int value = buyerCommentDO.getCommentType();
-            switch(value){
-                case 1:
-                    commentVO.setValues(5);
-                    break;
-                case 2:
-                    commentVO.setValues(3);
-                    break;
-                case 3:
-                    commentVO.setValues(1);
-                    break;
+            if (buyerCommentDO != null) {
+                commentVO.setContent(buyerCommentDO.getComment());
+                commentVO.setCreateTime(buyerCommentDO.getCreateTime());
+                int value = buyerCommentDO.getCommentType();
+                switch (value) {
+                    case 1:
+                        commentVO.setValues(5);
+                        break;
+                    case 2:
+                        commentVO.setValues(3);
+                        break;
+                    case 3:
+                        commentVO.setValues(1);
+                        break;
+                }
             }
             UserDO userDO = userDOMapper.selectByPrimaryKey(userId);
             commentVO.setUsername(userDO.getUserName());
