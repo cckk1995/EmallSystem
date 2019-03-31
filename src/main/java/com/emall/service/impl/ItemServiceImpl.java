@@ -217,13 +217,14 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<GoodsListVO> getItemByKeyWord(String keyword) throws BusinessException {
         List<GoodsListVO> goodsListVOS = new ArrayList<>();
+        List<ItemDO> list = null;
         try{
-            List<ItemDO> list = itemDOMapper.getItemByKeyword(keyword);
-            for(ItemDO itemDO : list){
-                goodsListVOS.add(convertItemDoToGoodsVo(itemDO));
-            }
+            list = itemDOMapper.getItemByKeyword(keyword);
         }catch (Exception e){
             throw new BusinessException(EmBusinessError.DATABASE_ERROR);
+        }
+        for(ItemDO itemDO : list){
+            goodsListVOS.add(convertItemDoToGoodsVo(itemDO));
         }
         return goodsListVOS;
     }
