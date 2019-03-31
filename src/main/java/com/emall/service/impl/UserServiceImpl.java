@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -160,31 +159,31 @@ public class UserServiceImpl implements IUserService {
 
 
     @Override
-    public CommonReturnType userInfo(UserVO userVO, HttpServletRequest request) throws BusinessException{
-        if (checkValid(userVO.getUserName(), Const.USERNAME)) {
-            UserDO userDO = new UserDO();
-            BeanUtils.copyProperties(userVO, userDO);
-            String userId = getUserId(request);
-            userDO.setUserId(userId);
-            if (userVO.getGender() == Const.MAN_CODE) {
-                userDO.setGender(true);
-            }
-            if (userVO.getGender() == Const.WOMEN_CODE) {
-                userDO.setGender(false);
-            }
-            if (userVO.getBirthday() != null) {
-                userDO.setBirthday(DateTimeUtil.str2Date(userVO.getBirthday()));
-            }
-            int result = userDOMapper.updateByPrimaryKeySelective(userDO);
-            if (result == 0) {
-                log.error("更新用户信息失败", new BusinessException(EmBusinessError.UPDATE_USER_INFO_ERROR));
-                throw new BusinessException(EmBusinessError.UPDATE_USER_INFO_ERROR);
-            }
-            return CommonReturnType.create(userDO);
-        } else {
+    public CommonReturnType userInfo(UserVO userVO, String userId) throws BusinessException{
+        //if (checkValid(userVO.getUserName(), Const.USERNAME)) {
+        UserDO userDO = new UserDO();
+        BeanUtils.copyProperties(userVO, userDO);
+        userDO.setRealName(userVO.getRealname());
+        userDO.setUserId(userId);
+        if (userVO.getGender() == Const.MAN_CODE) {
+            userDO.setGender(true);
+        }
+        if (userVO.getGender() == Const.WOMEN_CODE) {
+            userDO.setGender(false);
+        }
+        if (userVO.getBirthday() != null) {
+            userDO.setBirthday(DateTimeUtil.str2Date(userVO.getBirthday()));
+        }
+        int result = userDOMapper.updateByPrimaryKeySelective(userDO);
+        if (result == 0) {
+            log.error("更新用户信息失败", new BusinessException(EmBusinessError.UPDATE_USER_INFO_ERROR));
+            throw new BusinessException(EmBusinessError.UPDATE_USER_INFO_ERROR);
+        }
+        return CommonReturnType.create(userDO);
+        /*} else {
             log.error("校验参数类型错误", new BusinessException(EmBusinessError.USER_CHECK_TYPE_ERROR));
             throw new BusinessException(EmBusinessError.USER_CHECK_TYPE_ERROR);
-        }
+        }*/
     }
 
     /**
@@ -194,10 +193,13 @@ public class UserServiceImpl implements IUserService {
      * @throws BusinessException 异常
      */
     @Override
-    public CommonReturnType modifyEmail(String email, HttpServletRequest request) throws BusinessException{
+    public CommonReturnType modifyEmail(String email, String userId) throws BusinessException{
+        String oldEmail = userDOMapper.getEmailByUserId(userId);
+        if (StringUtils.equals(email, oldEmail)) {
+            return CommonReturnType.create(email);
+        }
         if (checkValid(email, Const.EMAIL)) {
             UserDO userDO = new UserDO();
-            String userId = getUserId(request);
             userDO.setUserId(userId);
             userDO.setEmail(email);
             int result = userDOMapper.updateByPrimaryKeySelective(userDO);
@@ -216,8 +218,11 @@ public class UserServiceImpl implements IUserService {
      * @throws BusinessException 异常
      */
     @Override
-    public CommonReturnType modifyTel(String tel, HttpServletRequest request) throws BusinessException{
-        String userId = getUserId(request);
+    public CommonReturnType modifyTel(String tel, String userId) throws BusinessException{
+        String oldTel = userDOMapper.getTelByUserId(userId);
+        if (StringUtils.equals(oldTel, tel)) {
+            return CommonReturnType.create(tel);
+        }
         if (checkValid(tel, Const.TELEPHONE)) {
             UserDO userDO = new UserDO();
             userDO.setUserId(userId);
@@ -241,8 +246,7 @@ public class UserServiceImpl implements IUserService {
      * @throws BusinessException 异常
      */
     @Override
-     public CommonReturnType modifyPassword(String oldPwd, String newPwd, String confirmPwd, HttpServletRequest request) throws BusinessException{
-        String userId = getUserId(request);
+    public CommonReturnType modifyPassword(String oldPwd, String newPwd, String confirmPwd, String userId) throws BusinessException{
         UserPasswordDO userPasswordDO = userPasswordDOMapper.selectByUserId(userId);
         if (userPasswordDO == null) {
             return CommonReturnType.create("无该用户信息", "fail");
@@ -262,29 +266,30 @@ public class UserServiceImpl implements IUserService {
         return CommonReturnType.create("修改密码成功");
     }
 
-    private String getUserId(HttpServletRequest request) throws BusinessException{
+    /*private String getUserId(HttpServletRequest request) throws BusinessException{
         String token = CookieUtil.readLoginToken(request);
         if (StringUtils.isBlank(token)) {
             throw new BusinessException(EmBusinessError.USER_NOT_EXIST);
         }
-        String userId = redisTemplate.opsForValue().get(token);
+        String userDOStr = redisTemplate.opsForValue().get(token);
+        UserDO userDO = JsonUtil.string2Obj(userDOStr, UserDO.class);
+        String userId = userDO.getUserId();
         if (StringUtils.isBlank(userId)) {
             throw new BusinessException(EmBusinessError.TOKEN_EXPIRED);
         }
         return userId;
-    }
+    }*/
 
     /**
      *
      * @param addressVO 收获地址VO
-     * @param request 获取userId
+     * @param
      * @return 成功或失败
      */
     @Override
-    public CommonReturnType addAddress(AddressVO addressVO, HttpServletRequest request) throws BusinessException{
+    public CommonReturnType addAddress(AddressVO addressVO, String userId) throws BusinessException{
         AddressDO addressDO = new AddressDO();
         BeanUtils.copyProperties(addressVO, addressDO);
-        String userId = getUserId(request);
         if (StringUtils.isBlank(userId)) {
             log.error("查不到用户的信息", new BusinessException(EmBusinessError.USER_NOT_EXIST));
             throw new BusinessException(EmBusinessError.USER_NOT_EXIST);
@@ -300,19 +305,17 @@ public class UserServiceImpl implements IUserService {
         if (result == 0) {
             return CommonReturnType.create("添加收获地址失败", "fail");
         }
-        return CommonReturnType.create(addressVO);
+        return CommonReturnType.create(addressDO);
     }
 
     /**
      *
-     * @param addressId 地址id
-     * @param request 用户相关信息
+     * @param addressId 地址
      * @return 返回成功或失败
      * @throws BusinessException 异常
      */
     @Override
-    public CommonReturnType delAddress(String addressId, HttpServletRequest request) throws BusinessException{
-        String userId = getUserId(request);
+    public CommonReturnType delAddress(String addressId, String userId) throws BusinessException{
         if (StringUtils.isBlank(userId)) {
             log.error("查不到用户的信息", new BusinessException(EmBusinessError.USER_NOT_EXIST));
             throw new BusinessException(EmBusinessError.USER_NOT_EXIST);
@@ -326,13 +329,11 @@ public class UserServiceImpl implements IUserService {
 
     /**
      *
-     * @param request 用户相关信息
      * @return 返回收货地址信息
      * @throws BusinessException 异常
      */
     @Override
-    public CommonReturnType getAddresses(HttpServletRequest request) throws BusinessException{
-        String userId = getUserId(request);
+    public CommonReturnType getAddresses(String userId) throws BusinessException{
         if (StringUtils.isBlank(userId)) {
             log.error("查不到用户的信息", new BusinessException(EmBusinessError.USER_NOT_EXIST));
             throw new BusinessException(EmBusinessError.USER_NOT_EXIST);
@@ -341,15 +342,30 @@ public class UserServiceImpl implements IUserService {
         return CommonReturnType.create(addressDOList);
     }
 
+    @Override
+    public CommonReturnType setDefaultAddress(String userId, String addressId) throws BusinessException {
+        List<AddressDO> addressVOList = addressDOMapper.selectByUserId(userId);
+        for (AddressDO addressDO : addressVOList) {
+            if (addressDO.getAddressId().equals(addressId)) {
+                addressDO.setIsDefault(true);
+            } else {
+                addressDO.setIsDefault(false);
+            }
+            int result = addressDOMapper.updateByPrimaryKeySelective(addressDO);
+            if (result == 0) {
+                return CommonReturnType.create("修改默认地址失败", "fail");
+            }
+        }
+        return CommonReturnType.create("修改默认地址成功", "success");
+    }
+
     /**
      *
-     * @param request 用户相关信息
      * @return 商家评价
      * @throws BusinessException 异常
      */
     @Override
-    public CommonReturnType commentsBySeller(HttpServletRequest request) throws BusinessException{
-        String userId = getUserId(request);
+    public CommonReturnType commentsBySeller(String userId) throws BusinessException{
         if (StringUtils.isBlank(userId)) {
             log.error("查不到用户的信息", new BusinessException(EmBusinessError.USER_NOT_EXIST));
             throw new BusinessException(EmBusinessError.USER_NOT_EXIST);
@@ -359,8 +375,6 @@ public class UserServiceImpl implements IUserService {
     }
 
     /**
-     *
-     * @param request 获取用户id
      * @param orderItemId 订单id
      * @param comment 评论
      * @param commentType 评论类型
@@ -369,9 +383,8 @@ public class UserServiceImpl implements IUserService {
      * @throws BusinessException 异常
      */
     @Override
-    public CommonReturnType commentsByUser(HttpServletRequest request, String orderItemId,
+    public CommonReturnType commentsByUser(String userId, String orderItemId,
                                            String comment, String commentType, String commentImgUrl) throws BusinessException{
-        String userId = getUserId(request);
         if (StringUtils.isBlank(userId)) {
             log.error("查不到用户的信息", new BusinessException(EmBusinessError.USER_NOT_EXIST));
             throw new BusinessException(EmBusinessError.USER_NOT_EXIST);

@@ -1,8 +1,10 @@
 package com.emall.utils;
 
 
+
 import com.emall.response.CommonReturnType;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
@@ -59,6 +61,17 @@ public class JsonUtil {
         }
     }
 
+    public static <T> T string2Obj(String str, Class<T> clazz) {
+        if (StringUtils.isEmpty(str) || clazz == null) {
+            return null;
+        }
+        try {
+            return clazz.equals(String.class) ? (T) str : objectMapper.readValue(str, clazz);
+        } catch (Exception e) {
+            log.error("Parse String to Object error", e);
+            return null;
+        }
+    }
     public static void main(String[] args) {
         CommonReturnType returnType = new CommonReturnType();
         System.out.println(JsonUtil.obj2String(CommonReturnType.create("拦截用户未登录", "fail")));

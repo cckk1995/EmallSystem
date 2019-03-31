@@ -8,6 +8,7 @@ import com.emall.error.EmBusinessError;
 import com.emall.response.CommonReturnType;
 import com.emall.service.IUserService;
 import com.emall.utils.CookieUtil;
+import com.emall.utils.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,8 @@ public class UserController extends BaseController {
             //写入cookie
             CookieUtil.writeLoginToken(response, session.getId());
             //写入redis
-            redisTemplate.opsForValue().set(session.getId(), returnType.getData().toString(), Const.REDIS_SESSION_EXPIRETIME, TimeUnit.SECONDS);
+            String userDOStr = JsonUtil.obj2String(returnType.getData());
+            redisTemplate.opsForValue().set(session.getId(), userDOStr, Const.REDIS_SESSION_EXPIRETIME, TimeUnit.SECONDS);
         }
         return returnType;
     }
@@ -67,7 +69,7 @@ public class UserController extends BaseController {
 
     @PostMapping("userInfo")
     public CommonReturnType userInfo(@Valid UserVO userVO, BindingResult bindingResult,
-                                     HttpServletRequest request) throws BusinessException {
+                                     String userId) throws BusinessException {
         if (bindingResult.hasErrors()) {
             //System.out.println(bindingResult.getAllErrors().toString());
             log.error("参数错误", new BusinessException(EmBusinessError.PARAM_ERROR, bindingResult.getFieldError().getDefaultMessage()));
@@ -79,7 +81,7 @@ public class UserController extends BaseController {
 //            throw new BusinessException(EmBusinessError.TOKEN_EXPIRED);
 //        }
 //        String userId = redisTemplate.opsForValue().get(token);
-        CommonReturnType returnType = userService.userInfo(userVO, request);
+        CommonReturnType returnType = userService.userInfo(userVO, userId);
 //        if (returnType.isSuccess()) {
 //            redisTemplate.opsForValue().set(token, userId, Const.REDIS_SESSION_EXPIRETIME);
 //        }
@@ -87,64 +89,69 @@ public class UserController extends BaseController {
     }
 
     @PostMapping("modifyEmail")
-    public CommonReturnType modifyEmail(HttpServletRequest request, String email) throws BusinessException {
+    public CommonReturnType modifyEmail(String userId, String email) throws BusinessException {
         if (StringUtils.isBlank(email)) {
             return CommonReturnType.create("邮箱不能为空");
         }
-        return userService.modifyEmail(email, request);
+        return userService.modifyEmail(email, userId);
     }
 
     @PostMapping("modifyTel")
-    public CommonReturnType modifyTel(HttpServletRequest request, String tel) throws BusinessException {
+    public CommonReturnType modifyTel(String userId, String tel) throws BusinessException {
         if (StringUtils.isBlank(tel)) {
             return CommonReturnType.create("电话不能为空");
         }
-        return userService.modifyTel(tel, request);
+        return userService.modifyTel(tel, userId);
     }
 
     @PostMapping("modifyPassword")
-    public CommonReturnType modifyPassword(HttpServletRequest request, String oldPwd, String newPwd, String confirmPwd) throws BusinessException {
+    public CommonReturnType modifyPassword(String userId, String oldPwd, String newPwd, String confirmPwd) throws BusinessException {
         if (StringUtils.isBlank(oldPwd) || StringUtils.isBlank(newPwd) || StringUtils.isBlank(confirmPwd)) {
             return CommonReturnType.create("密码不能为空");
         }
-        return userService.modifyPassword(oldPwd, newPwd, confirmPwd, request);
+        return userService.modifyPassword(oldPwd, newPwd, confirmPwd, userId);
     }
 
     @PostMapping("addAddress")
     public CommonReturnType addAddress(@Valid AddressVO addressVO,
                                        BindingResult bindingResult,
-                                       HttpServletRequest request) throws BusinessException {
+                                       String userId) throws BusinessException {
         if (bindingResult.hasErrors()) {
             //System.out.println(bindingResult.getAllErrors().toString());
             log.error("参数错误", new BusinessException(EmBusinessError.PARAM_ERROR, bindingResult.getFieldError().getDefaultMessage()));
             throw new BusinessException(EmBusinessError.PARAM_ERROR, bindingResult.getFieldError().getDefaultMessage());
         }
-        return userService.addAddress(addressVO, request);
+        return userService.addAddress(addressVO, userId);
     }
 
     @GetMapping("delAddress")
-    public CommonReturnType delAddress(String addressId, HttpServletRequest request) throws BusinessException {
+    public CommonReturnType delAddress(String addressId, String userId) throws BusinessException {
         if (StringUtils.isBlank(addressId)) {
             log.error("参数错误", new BusinessException(EmBusinessError.PARAM_ERROR));
             throw new BusinessException(EmBusinessError.PARAM_ERROR);
         }
-        return userService.delAddress(addressId, request);
+        return userService.delAddress(addressId, userId);
     }
 
     @GetMapping("getAddresses")
-    public CommonReturnType getAddresses(HttpServletRequest request) throws BusinessException {
-        return userService.getAddresses(request);
+    public CommonReturnType getAddresses(String userId) throws BusinessException {
+        return userService.getAddresses(userId);
+    }
+
+    @GetMapping("setDefaultAddress")
+    public CommonReturnType seyDefaultAddress(String userId, String addressId) throws BusinessException {
+        return userService.setDefaultAddress(userId, addressId);
     }
 
     @GetMapping("commentsBySeller")
-    public CommonReturnType commentsBySeller(HttpServletRequest request) throws BusinessException {
-        return userService.commentsBySeller(request);
+    public CommonReturnType commentsBySeller(String userId) throws BusinessException {
+        return userService.commentsBySeller(userId);
     }
 
     @PostMapping("commentsByBuyer")
-    public CommonReturnType commentsByBuyer(HttpServletRequest request, String orderItemId, String comment,
+    public CommonReturnType commentsByBuyer(String userId, String orderItemId, String comment,
                                             @RequestParam(defaultValue = "1") String commentType, String commentImgUrl) throws BusinessException{
-        return userService.commentsByUser(request, orderItemId, comment, commentType, commentImgUrl);
+        return userService.commentsByUser(userId, orderItemId, comment, commentType, commentImgUrl);
     }
 
 
